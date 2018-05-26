@@ -1,0 +1,15 @@
+#!/bin/sh
+echo "serverize, a tool to make any long-term running program a deamon in linux system"
+echo "version 0.1"
+if [ $# -eq 0 ]; then
+	echo "usage: $0 (appname) [parameters]"
+	return 1
+fi
+
+command="$*"
+
+nohup $command > "/tmp/$1.log" 2>&1 &
+
+echo "app output will be directed to /tmp/$1.log"
+echo "done!"
+

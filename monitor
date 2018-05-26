@@ -1,0 +1,19 @@
+#!/bin/sh
+if [ $# -eq 0 ]; then
+	echo "usage: $0 (Appname) [parameters]"
+	return 1
+fi
+app="$*"
+dir=`dirname $0`
+cd $dir
+pid=`ps -C "$app" | awk 'NR==2 {print $1}'`
+if [ 0$pid -gt 0 ]; then
+	echo "$1 is running: pid=$pid"
+	exit 0
+else
+	echo "$1 is not running"
+	echo "trying to restart it"
+	"$dir"/serverize $app
+	exit 1
+fi
+

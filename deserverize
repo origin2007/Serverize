@@ -1,0 +1,19 @@
+#!/bin/sh
+app="$*"
+#find pid
+pid=`ps -C "$app" | awk 'NR==2 {print $1}'`
+if [ 0$pid -gt 0 ] 
+then
+	kill $pid
+	sleep 1
+	if [ $? -ne 0 ]
+	then
+		kill -s KILL $pid
+	fi
+	echo "done!"
+	exit 0
+else
+	echo "Cannot find the PID of Application: $app"
+	exit 1
+fi
+

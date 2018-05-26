@@ -1,0 +1,25 @@
+#!/bin/sh
+if [ $# -eq 0 ]; then
+	echo "usage: $0 (Appname) [parameters]"
+	return 1
+fi
+
+command="$*"
+dir=`dirname $0`
+cd $dir
+dir=`pwd`
+#add periodically clear the log file
+
+crontab -l > /tmp/cron.tmp
+echo "old crontab:"
+echo "`cat /tmp/cron.tmp`"
+echo "add new crontab item"
+echo "*/2 * * * * \"$dir\"/monitor \"$command\" > /dev/null 2>&1 &" >> /tmp/cron.tmp
+crontab /tmp/cron.tmp
+echo "new crontab"
+crontab -l
+
+rm -f /tmp/cron.tmp
+
+echo "done!"
+
